@@ -1,2 +1,4 @@
 # QuantLibrary
-An attempt to build quant libraries and financial models from scratch 
+Hi, my name is Raymond Luo and I am a quant at BNP Paribas. I started this library as to encourage myself to implement some financial models on my own. It is important to note that all of these models (hopefully) have been written from scratch by me so there is no quality guarantee. It also means that I am not disclosing/copying any of the models I have seen at work. 
+
+Moreover, I want to state that I'm beginning this library in homage to the name of the late Peter Carr - who has been a valuable mentor to me. There has been a number of models that we have discussed that I have yet to see a thorough implementation of - the CGMY model, an analytical pricing for volatility knockouts (to which Professor Carr has solved for prior to his passing in 2022), etc. Hopefully this library steadily fills up with time and is a project I actually "commit" to (because more often than I not I forget let it grow dust).
