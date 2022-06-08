@@ -1,4 +1,4 @@
-#include "unit structures/asset.h"
+#include"derivatives.hpp"
 
 enum optionStyle {
     European, American, Bermudan, Asian
@@ -14,8 +14,6 @@ class Option : public Derivative {
         double maturity;
         double dividend_rate; 
         double r; 
-
-        double premium()
 
         optionStyle getStyle() {
             return style;
