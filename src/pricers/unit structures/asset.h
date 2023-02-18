@@ -45,7 +45,7 @@ class Equity: public Asset{
 }
 
 enum rating{
-    AAA
+    AAA, AA, A, BBB, BB, B, CCC, CC, C
 };
 
 class Bond: public Asset{
