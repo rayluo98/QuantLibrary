@@ -1,34 +1,38 @@
-#include"derivatives.hpp"
+using namespace UnitStructures;
 
-enum optionStyle {
-    European, American, Bermudan, Asian
-};
+namespace Option{
+    enum optionStyle {
+        European, American, Bermudan, Asian
+    };
 
-enum priceProcess{
-    BS, Bachelier, CGMY, LocalVol_Basic, StochVol_Basic
-};
+    enum priceProcess{
+        BS, Bachelier, CGMY, LocalVol_Basic, StochVol_Basic
+    };
 
-class Option : public Derivative {
-    public:
-        double strike;
-        double maturity;
-        double dividend_rate; 
-        double r; 
+    class Option : public Derivative {
+        public:
+            double strike;
+            double maturity;
+            double dividend_rate; 
+            double r; 
 
-        optionStyle getStyle() {
-            return style;
-        }
+            double premium()
 
-        double impliedVol()
+            optionStyle getStyle() {
+                return style;
+            }
+
+            double impliedVol()
 
 
-    private:
-        double premium;
-        double implied_vol; 
-        optionStyle style;
-}
+        private:
+            double premium;
+            double implied_vol; 
+            optionStyle style;
+    }
 
-class VanillaOption : public Option { 
-    public: 
+    class VanillaOption : public Option { 
+        public: 
 
+    }
 }

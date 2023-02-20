@@ -1,6 +1,5 @@
 //include "option.h"
-using Model;
-
+using namespace Model;
 class BSModel : public Model
 {
 public:

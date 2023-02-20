@@ -2,6 +2,7 @@ typedef std::vector<double> SamplePath;
 #include <cstdlib>
 #include <ctime>
 using namespace std;
+using namespace Option;
 
 namespace Model{
     class Model{
