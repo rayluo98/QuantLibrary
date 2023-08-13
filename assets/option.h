@@ -22,10 +22,14 @@ class Option : public Asset {
             return style;
         }
 
-        double impliedVol() {
-            return 0.0;
+        double getImpliedVol() {
+            return implied_vol;
         }
 
+        double getStrike() {
+            return strike;
+        }
+        
         void Update() {
             // Do nothing
         }
