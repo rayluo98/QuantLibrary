@@ -1,7 +1,8 @@
 #include <ctime>
 #include <string>
 #include <iostream>
-#include "assets/option.h"
+//#include "assets/options.h"
+#include "pricers/BSModel.h"
 
 
 namespace QLabs {

@@ -18,6 +18,7 @@ class Asset{
         void setQuantity(double quantity){_quantity = quantity;}
         std::string Ticker(){return _ticker;}
 
-        virtual void Update() = 0;
+        //virtual void Update() = 0;
+        void Update();
         Asset() : _price(0), _quantity(0) {}
 };

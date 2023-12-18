@@ -1,14 +1,15 @@
 #include "asset.h"
 
-enum optionStyle {
-    European, American, Bermudan, Asian
-};
+namespace Asset {
+    enum optionStyle {
+        European, American, Bermudan, Asian
+    };
 
-enum priceProcess{
-    BS, Bachelier, CGMY, LocalVol_Basic, StochVol_Basic
-};
+    enum priceProcess {
+        BS, Bachelier, CGMY, LocalVol_Basic, StochVol_Basic
+    };
 
-class Option : public Asset {
+    class Option : public Asset {
     public:
         Option() {
             premium = 10.0;
@@ -29,18 +30,19 @@ class Option : public Asset {
         double getStrike() {
             return strike;
         }
-        
+
         void Update() {
             // Do nothing
         }
 
     private:
         double premium;
-        double implied_vol; 
+        double implied_vol;
         optionStyle style;
         double strike;
         double maturity;
-        double dividend_rate; 
-        double r; 
+        double dividend_rate;
+        double r;
 
-};
+    };
+}
