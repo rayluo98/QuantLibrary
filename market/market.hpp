@@ -1,11 +1,13 @@
 using namespace std; 
 #include<ctime>
 #include<cstdlib>
-#include"asset.h"
+#include"../assets/asset.h"
+#include <unordered_map>
+#include <map>
 
 class Market_History {
 public: 
-	std::unordered_map<string, 
+	std::unordered_map<string, Asset> history;
 };
 
 class Referential {
