@@ -1,5 +1,6 @@
 #include "option.h"
 #include "model.hpp"
+using namespace Derivatives;
 
 class BSModel : public Model
 {
@@ -10,13 +11,13 @@ public:
 		_option = option;
 	}
 	void GenerateSamplePath(double T, int m, SamplePath& S);
+	void Update_Params();
+	void Update_Params(double mu, double sig);
 };
-
-const double pi = 4.0 * atan(1.0);
 
 void BSModel::GenerateSamplePath(double T, int m, SamplePath& S)
 {
-	double St = S0;
+	double St = S[0];
 	for (int k = 0; k < m; k++)
 	{
 		S[k] = St * exp((drift - sigma * sigma * 0.5) * (T / m) + sigma * sqrt(T / m) * Gauss());
