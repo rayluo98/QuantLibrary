@@ -1,4 +1,4 @@
-#include "assets/asset.h"
+#include "../assets/asset.h"
 #include "model.hpp"
 
 class Derivative : public Asset {

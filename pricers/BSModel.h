@@ -1,4 +1,4 @@
-#include "option.h"
+#include "../pricers/option.h"
 #include "model.hpp"
 using namespace Derivatives;
 
