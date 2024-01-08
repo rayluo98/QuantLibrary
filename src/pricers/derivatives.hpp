@@ -1,8 +1,13 @@
-#include "unit structures/asset.h"
+#include "../assets/asset.h"
+#include "model.hpp"
 
-class Derivative {
-public:
+class Derivative : public Asset {
+private:
 	Asset underlying;
+public:
+	Derivative() : Asset() {};
 
-	double getPremium(Model mod) = 0;
+	void Update();
+
+	virtual double getPremium() = 0;
 };
