@@ -1,10 +1,3 @@
-//
-//  matrix.h
-//  test
-//
-//  Created by Mengmeng  Wang on 5/12/21.
-//
-
 #include "iostream"
 #include <vector>
 using namespace std;
@@ -42,6 +35,10 @@ public:
             delete[] p[i];
         }
         delete[] p;
+    }
+
+    std::pair(int, int) get_dim() {
+        return make_pair(row_num, col_num);
     }
 
 
@@ -98,6 +95,19 @@ public:
 
     }
 
+    matrix operation* (matrix a, matrix b) {
+        auto a_dims = a.get_dim();
+        auto b_dims = b.get_dim();
+        if (a_dims.second != b_dims.first)
+            return new matrix(0,0); //need to replace with error handling
+        matrix res = new matrix(a_dims.first, b_dims.second);
+        for (int i = 0; i < a_dims.first; ++i) {
+            for (int j = 0; j < b_dims.second; ++j) {
+                res[i][j] = 0; // to fill
+            }
+        }
+    }
+    
     double sum()
     {
         double ans = 0;
