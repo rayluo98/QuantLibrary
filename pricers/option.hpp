@@ -51,12 +51,12 @@ namespace Derivatives {
 
     
     class VanillaOption : public Option {
-        public:
-            explicit VanillaOption(double _s = 0, double _m = 0, double _d = 0, double _r = 0) : 
-                Option(_s, _m, _d, _r){};
+    public:
+        explicit VanillaOption(double _s = 0, double _m = 0, double _d = 0, double _r = 0) :
+            Option(_s, _m, _d, _r) {};
 
-        private: 
-            double Payoff(double S){return max(0.0, S - strike);};
-    }
+    private:
+        double Payoff(double S) { return max(0.0, S - strike); };
+    };
     
 }

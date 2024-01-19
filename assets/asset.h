@@ -1,7 +1,6 @@
 #include<ctime>
 #include<cmath>
 #include<string>
-#include "asset_enums.h"
 using namespace std;
 
 class Asset{

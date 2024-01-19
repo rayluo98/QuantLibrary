@@ -1,8 +1,9 @@
 #include <ctime>
 #include <string>
 #include <iostream>
-//#include "assets/options.h"
+#include "assets/option.h"
 #include "pricers/BSModel.h"
+#include "math_library/matrix.h"
 
 
 namespace QLabs {
@@ -12,5 +13,5 @@ namespace QLabs {
         std::cout << option.getPremium() << std::endl;
 
         return EXIT_SUCCESS;
-    }
+    };
 }

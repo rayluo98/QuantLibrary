@@ -37,7 +37,7 @@ public:
         delete[] p;
     }
 
-    std::pair(int, int) get_dim() {
+    std::pair<int, int> get_dim() {
         return make_pair(row_num, col_num);
     }
 
@@ -72,7 +72,6 @@ public:
         return *this;
     }
 
-
     matrix& operator+(const matrix& m)
     {
         return (*this) += m;
@@ -92,20 +91,42 @@ public:
     matrix& operator*(double a)
     {
         return (*this) *= a;
-
     }
 
-    matrix operation* (matrix a, matrix b) {
+    matrix* mmult(matrix a, matrix b) {
         auto a_dims = a.get_dim();
         auto b_dims = b.get_dim();
         if (a_dims.second != b_dims.first)
             return new matrix(0,0); //need to replace with error handling
-        matrix res = new matrix(a_dims.first, b_dims.second);
+        matrix* res = new matrix(a_dims.first, b_dims.second);
         for (int i = 0; i < a_dims.first; ++i) {
             for (int j = 0; j < b_dims.second; ++j) {
-                res[i][j] = 0; // to fill
+
+                res->p[i][j] = dot(a.getRow(i), b.getCol(j));
             }
         }
+        return res;
+    }
+
+    double* getRow(int i) {
+        return p[i];
+    }
+
+    double* getCol(int i) {
+        auto col = new double[row_num];
+        for (int j = 0; j < row_num; j++) {
+            col[j] = p[i][j];
+        }
+        return col;
+    }
+
+    double dot(double* v_1, double* v_2) {
+        size_t length = sizeof(v_1) / sizeof(v_1[0]);
+        double res = 0.0;
+        for (size_t i = 0; i < length; ++i) {
+            res += v_1[i] * v_2[i];
+        }
+        return res;
     }
     
     double sum()
