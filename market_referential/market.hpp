@@ -1,7 +1,7 @@
 using namespace std; 
 #include<ctime>
 #include<cstdlib>
-#include"pricers/unit structures/asset.h"
+#include"asset.h"
 
 class Market_History {
 public: 
@@ -10,15 +10,11 @@ public:
 
 class Referential {
 public:
-	std::map<time_t, Asset> _hist;
-	string _ticker;
-	string _refSource;
+	std::map<time_t, Asset> referential_hist;
+	string ticker;
 
 	Referential history_trim(time_t t1, time_t t2) {
 		std::map<time_t, Asset> new_hist;
 		//creates a trim of the history observed
 	}
-
-	string getSource(const std::string& refSource)
-	{return _refSource; _refSource=refSource;}
 };

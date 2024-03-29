@@ -1,8 +1,12 @@
 #include<ctime>
 #include<cmath>
 #include<string>
-#include "asset_enums.h"
+#pragma once
 using namespace std;
+
+enum TickerType {
+    ISIN, CUSIP, SEDOL
+};
 
 class Asset{
     private:

@@ -1,16 +1,17 @@
 #include <ctime>
 #include <string>
 #include <iostream>
-//#include "assets/options.h"
+#include "main.h"
+#include "assets/option.h"
 #include "pricers/BSModel.h"
+#include "math_library/matrix.h"
 
+using namespace QLabs;
 
-namespace QLabs {
-    int main(int argc, char** argv) {
+int QLabs::_run(int argc, char** argv) {
         std::string who = "world";
         Option option;
         std::cout << option.getPremium() << std::endl;
 
         return EXIT_SUCCESS;
-    }
-}
+};

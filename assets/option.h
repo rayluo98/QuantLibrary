@@ -1,6 +1,6 @@
 #include "asset.h"
 
-namespace Asset {
+namespace stdAsset {
     enum optionStyle {
         European, American, Bermudan, Asian
     };

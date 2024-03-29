@@ -1,12 +1,7 @@
-<<<<<<<< HEAD:src/pricers/Models/BSM/BSModel.cpp
-//include "option.h"
-using namespace Model;
-========
-#include "../pricers/option.h"
+#include "../pricers/option.hpp"
 #include "model.hpp"
 using namespace Derivatives;
 
->>>>>>>> remotes/origin/dev:pricers/BSModel.h
 class BSModel : public Model
 {
 public:
