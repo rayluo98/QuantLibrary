@@ -1,5 +1,6 @@
+#include <iostream>
 using namespace std;
 
-void main(){
-    
+int main(){
+    std::cout << "Hello World!" << std::endl;
 }
