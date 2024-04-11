@@ -128,7 +128,7 @@ namespace MatLib
         return col;
     }
 
-    double dot(double *v_1, double *v_2)
+    double Matrix::dot(double *v_1, double *v_2)
     {
         int length = *(&v_1 + 1) - v_1;
         double res = 0.0;
