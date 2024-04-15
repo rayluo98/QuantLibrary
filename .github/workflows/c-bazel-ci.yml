@@ -1,0 +1,20 @@
+name: C++ bazel CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: bazelbuild/setup-bazelisk@v3
+    - name: Build Everything
+      run: bazel build //math_library
+    - name: Test Everything
+    - run: bazel test --cxxopt=-std=c++14 --test_output=all //...
