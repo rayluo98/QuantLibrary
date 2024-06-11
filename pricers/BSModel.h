@@ -15,8 +15,8 @@ public:
 	void Update_Params(double mu, double sig);
 	void CalculateBS(unsigned int iteration = 10000, unsigned int mesh = 1){
 		long sum = 0;
-		double T = _option.maturity;
-		for (int i = 0; i < iteration; ++i) {
+		// double T = _option.maturity;
+		for (unsigned int i = 0; i < iteration; ++i) {
 			sum += 0;//_option.payGenerateSamplePath(T, mesh)
 		}
 		_option.setPremium(sum / iteration);
