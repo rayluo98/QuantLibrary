@@ -8,19 +8,26 @@ public:
 	Option _option;
 	BSModel(Option option)
 	{
+		path_hist = vector<SamplePath>();
 		_option = option;
 	}
 	void GenerateSamplePath(double T, int m, SamplePath& S);
 	void Update_Params();
 	void Update_Params(double mu, double sig);
-	void CalculateBS(unsigned int iteration = 10000, unsigned int mesh = 1){
+	void CalculateBS(unsigned int iteration = 10000, unsigned int mesh = 1, bool storeSamples = false){
 		long sum = 0;
 		// double T = _option.maturity;
 		for (unsigned int i = 0; i < iteration; ++i) {
-			sum += 0;//_option.payGenerateSamplePath(T, mesh)
+			SamplePath path;
+			GenerateSamplePath(_option.maturity, mesh, path);
+			sum += path[mesh];
+			if (storeSamples)
+				path_hist.push_back(path);
 		}
 		_option.setPremium(sum / iteration);
 	}
+private:
+	vector<SamplePath> path_hist;
 };
 
 void BSModel::GenerateSamplePath(double T, int m, SamplePath& S)

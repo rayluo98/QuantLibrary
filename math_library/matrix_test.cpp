@@ -2,6 +2,7 @@
 #include <utility>
 #include "matrix.h"
 
+
 TEST(MatrixTest, GetDimSuccess) {
     MatLib::Matrix mat(5, 5);
     std::pair<int, int> expected_results(5, 5);
@@ -15,4 +16,3 @@ TEST(MatrixTest, GetDimFailure) {
 
     EXPECT_NE(mat.get_dim(), unexpected_results);
 }
-

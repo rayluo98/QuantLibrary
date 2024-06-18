@@ -9,12 +9,12 @@ namespace MatLib
     class Matrix
     {
     private:
-        int row_num, col_num;
+        size_t row_num, col_num;
         double **p;
         void initialize()
         {
             p = new double *[row_num];
-            for (int i = 0; i < row_num; i++)
+            for (size_t i = 0; i < row_num; i++)
             {
                 p[i] = new double[col_num];
             }
