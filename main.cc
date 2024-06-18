@@ -10,7 +10,7 @@ using namespace QLabs;
 
 int QLabs::_run(int argc, char** argv) {
         std::string who = "world";
-        Option option = Option(European, 100, 2, 0,0);
+        Option option(European, 100, 11, 0, 0);
         std::cout << option.getPremium() << std::endl;
 
         return EXIT_SUCCESS;

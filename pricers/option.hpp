@@ -12,8 +12,9 @@ namespace Derivatives {
 
     class Option : public Derivative {
     public:
-        explicit Option(optionStyle _style = European, double _k = 0, double _m = 0, double _d = 0, double _r = 0, double _iv = 0) : 
-            style(_style), strike(_k), maturity(_m), dividend_rate(_d), r(_r), _implied_vol(_iv){};
+        explicit Option(optionStyle _style = European, double _k = 0, double _m = 0, double _d = 0, double _r = 0, 
+            double _iv = 0, double _premium = 0) : 
+            style(_style), strike(_k), maturity(_m), dividend_rate(_d), r(_r), _implied_vol(_iv), _premium(_premium){};
         Option(Option& b) {
             strike = b.strike;
             maturity = b.maturity;
@@ -21,6 +22,7 @@ namespace Derivatives {
             r = b.r;
             _implied_vol = b._implied_vol;
             style = b.style;
+            _premium = b._premium;
         }
         double strike;
         double maturity;
