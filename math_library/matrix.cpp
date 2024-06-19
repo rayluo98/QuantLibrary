@@ -4,28 +4,28 @@ using namespace std;
 
 namespace MatLib
 {
-    Matrix::Matrix(size_t rows, size_t cols)
+    Matrix::Matrix(int rows, int cols)
     {
         row_num = rows;
         col_num = cols;
         initialize();
-        for (size_t i = 0; i < row_num; i++)
+        for (int i = 0; i < row_num; i++)
         {
-            for (size_t j = 0; j < col_num; j++)
+            for (int j = 0; j < col_num; j++)
             {
                 p[i][j] = 0;
             }
         }
     }
 
-    Matrix::Matrix(double **_p, size_t rows, size_t cols)
+    Matrix::Matrix(double **_p, int rows, int cols)
     {
         row_num = rows;
         col_num = cols;
         initialize();
-        for (size_t i = 0; i < row_num; i++)
+        for (int i = 0; i < row_num; i++)
         {
-            for (size_t j = 0; j < col_num; j++)
+            for (int j = 0; j < col_num; j++)
             {
                 p[i][j] = _p[i][j];
             }
@@ -34,7 +34,7 @@ namespace MatLib
 
     Matrix::~Matrix()
     {
-        for (size_t i = 0; i < row_num; i++)
+        for (int i = 0; i < row_num; i++)
         {
             delete[] p[i];
         }
@@ -48,18 +48,18 @@ namespace MatLib
 
     Matrix &Matrix::operator=(double *a)
     {
-        for (size_t i = 0; i < row_num; i++)
+        for (int i = 0; i < row_num; i++)
         {
-            for (size_t j = 0; j < col_num; j++)
+            for (int j = 0; j < col_num; j++)
                 p[i][j] = *(a + i * col_num + j);
         }
         return *this;
     }
     Matrix &Matrix::operator=(const vector<double> &a)
     {
-        for (size_t i = 0; i < row_num; i++)
+        for (int i = 0; i < row_num; i++)
         {
-            for (size_t j = 0; j < col_num; j++)
+            for (int j = 0; j < col_num; j++)
                 p[i][j] = a[i * col_num + j];
         }
         return *this;
@@ -67,9 +67,9 @@ namespace MatLib
 
     Matrix &Matrix::operator+=(const Matrix &m)
     {
-        for (size_t i = 0; i < row_num; i++)
+        for (int i = 0; i < row_num; i++)
         {
-            for (size_t j = 0; j < col_num; j++)
+            for (int j = 0; j < col_num; j++)
                 p[i][j] += m.p[i][j];
         }
         return *this;
@@ -82,9 +82,9 @@ namespace MatLib
 
     Matrix &Matrix::operator*=(double a)
     {
-        for (size_t i = 0; i < row_num; i++)
+        for (int i = 0; i < row_num; i++)
         {
-            for (size_t j = 0; j < col_num; j++)
+            for (int j = 0; j < col_num; j++)
                 p[i][j] = p[i][j] * a;
         }
         return *this;
@@ -102,9 +102,9 @@ namespace MatLib
         if (a_dims.second != b_dims.first)
             return new Matrix(0, 0); // need to replace with error handling
         Matrix *res = new Matrix(a_dims.first, b_dims.second);
-        for (size_t i = 0; i < a_dims.first; ++i)
+        for (int i = 0; i < a_dims.first; ++i)
         {
-            for (size_t j = 0; j < b_dims.second; ++j)
+            for (int j = 0; j < b_dims.second; ++j)
             {
 
                 res->p[i][j] = dot(a.getRow(i), b.getCol(j));
@@ -121,7 +121,7 @@ namespace MatLib
     double *Matrix::getCol(int i)
     {
         auto col = new double[row_num];
-        for (size_t j = 0; j < row_num; j++)
+        for (int j = 0; j < row_num; j++)
         {
             col[j] = p[i][j];
         }
@@ -132,7 +132,7 @@ namespace MatLib
     {
         size_t length = *(&v_1 + 1) - v_1;
         double res = 0.0;
-        for (size_t i = 0; i < length; ++i)
+        for (int i = 0; i < length; ++i)
         {
             res += v_1[i] * v_2[i];
         }
@@ -152,9 +152,9 @@ namespace MatLib
     double Matrix::sum(int n)
     {
         double ans = 0;
-        for (size_t i = 0; i < row_num; i++)
+        for (int i = 0; i < row_num; i++)
         {
-            for (size_t j = 0; j < n; j++)
+            for (int j = 0; j < n; j++)
                 ans += p[i][j];
         }
         return ans;
@@ -162,9 +162,9 @@ namespace MatLib
 
     void Matrix::show() const
     {
-        for (size_t i = 0; i < row_num; i++)
+        for (int i = 0; i < row_num; i++)
         {
-            for (size_t j = 0; j < col_num; j++)
+            for (int j = 0; j < col_num; j++)
                 cout << p[i][j] << " ";
             cout << endl;
         }

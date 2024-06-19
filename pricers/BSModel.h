@@ -1,18 +1,23 @@
 #include "../pricers/option.hpp"
 #include "model.hpp"
+#include"../market/market.hpp"
+#pragma once
 using namespace Derivatives;
 
 class BSModel : public Model
 {
 public:
 	Option _option;
-	BSModel(Option option)
+	BSModel(Option option):_option(option)
 	{
 		path_hist = vector<SamplePath>();
-		_option = option;
+		Update_Params();
 	}
+	BSModel(const BSModel& mod1) : _option(mod1._option), path_hist(mod1.path_hist) { Update_Params(); };
+
 	void GenerateSamplePath(double T, int m, SamplePath& S);
 	void Update_Params();
+	void Update_Params(Referential hist);
 	void Update_Params(double mu, double sig);
 	void CalculateBS(unsigned int iteration = 10000, unsigned int mesh = 1, bool storeSamples = false){
 		long sum = 0;
@@ -32,6 +37,8 @@ private:
 
 void BSModel::GenerateSamplePath(double T, int m, SamplePath& S)
 {
+	S.resize(m);
+	S[0] = _option.underlyers[0].Price();
 	double St = S[0];
 	for (int k = 0; k < m; k++)
 	{
@@ -39,9 +46,16 @@ void BSModel::GenerateSamplePath(double T, int m, SamplePath& S)
 		St = S[k];
 	}
 };
-void BSModel::Update_Params(){
+void BSModel::Update_Params(Referential hist){
     // This is where we implement how to update the drift/sigm terms from prices
+	return;
 };
+
+void BSModel::Update_Params() {
+	// Default update taking forward rate as drift and vol as implied vol
+	drift = _option.r;
+	sigma = _option.impliedVol();
+}
 
 void BSModel::Update_Params(double mu, double sig){
     drift = mu;
