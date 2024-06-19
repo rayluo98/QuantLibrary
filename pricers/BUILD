@@ -7,5 +7,6 @@ cc_library (
     visibility = ["//visibility:public"],
     deps = [
         "//assets:assets",
+	"//market:market"
     ],
 )
