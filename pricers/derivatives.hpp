@@ -7,6 +7,8 @@ private:
 public:
 	Derivative() : Asset() {};
 
+	double Payoff(SamplePath& S);
+
 	void Update();
 
 	virtual double getPremium() = 0;

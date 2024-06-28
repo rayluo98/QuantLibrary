@@ -19,7 +19,8 @@ public:
 	void Update_Params();
 	void Update_Params(Referential hist);
 	void Update_Params(double mu, double sig);
-	void CalculateBS(unsigned int iteration = 10000, unsigned int mesh = 1, bool storeSamples = false){
+
+	void CalculateBS(unsigned int iteration = 10000, unsigned int mesh = 1, double epsilon = 0.0001, bool storeSamples = false){
 		long sum = 0;
 		// double T = _option.maturity;
 		for (unsigned int i = 0; i < iteration; ++i) {
@@ -29,8 +30,27 @@ public:
 			if (storeSamples)
 				path_hist.push_back(path);
 		}
-		_option.setPremium(sum / iteration);
+		double H = 0.0, Hsq = 0.0, Heps = 0.0;
+		for (long i = 0; i < iteration; i++)
+		{
+			SamplePath path;
+			GenerateSamplePath(_option.maturity, mesh, path);
+			H = (i / (i + 1.0)) * H + _option.Payoff(path.back()) / (i + 1.0);
+			Hsq = (i / (i + 1.0)) * Hsq + pow(_option.Payoff(path.back()), 2.0) / (i + 1.0);
+			Rescale(path, 1.0 + epsilon);
+			Heps = (i / (i + 1.0)) * Heps + _option.Payoff(path.back()) / (i + 1.0);
+		}
+		_option.setPremium(exp(-_option.r * _option.tenor) * H);
+		PricingError = exp(-_option.r * _option.tenor) * sqrt(Hsq - H * H) / sqrt(iteration - 1.0);
+		delta = exp(-_option.r * _option.tenor) * (Heps - H) / (_option.underlyers.front().Price() * epsilon);
 	}
+
+	void Rescale(SamplePath& S, double x)
+	{
+		int m = S.size();
+		for (int j = 0; j < m; j++) S[j] = x * S[j];
+	}
+
 private:
 	vector<SamplePath> path_hist;
 };
