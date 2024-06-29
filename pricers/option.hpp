@@ -75,8 +75,9 @@ namespace Derivatives {
     
     class EurOption : public Option {
     public:
-        explicit EurOption(vector<Asset> underlyer, bool _isCall = true, double _k = 0, double _t = 0, double _m = 0, double _r = 0) :
-            Option(underlyer, European, isCall, _k, _t, _m, _r) {};
+        explicit EurOption(vector<Asset> underlyer, bool _isCall = true, double _k = 0, double _t = 0, double _m = 0, double _r = 0,
+            double _iv = 0, double _premium = 0) :
+            Option(underlyer, European, isCall, _k, _t, _m, _r, _iv, _premium) {};
 
         double d_plus(double S0, double sigma, double r);
         double d_minus(double S0, double sigma, double r);
