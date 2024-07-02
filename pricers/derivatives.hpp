@@ -2,9 +2,8 @@
 #include "model.hpp"
 
 class Derivative : public Asset {
-private:
-	Asset underlying;
 public:
+	vector<Asset> underlyers;
 	Derivative() : Asset() {};
 
 	double Payoff(SamplePath& S);

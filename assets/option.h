@@ -9,10 +9,10 @@ namespace stdAsset {
         BS, Bachelier, CGMY, LocalVol_Basic, StochVol_Basic
     };
 
+    // Note that this is the referential object and not the pricing object
     class Option : public Asset {
     public:
         Option() {
-            premium = 10.0;
         }
 
         double getPremium() {

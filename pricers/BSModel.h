@@ -20,22 +20,54 @@ public:
 	void Update_Params(Referential hist);
 	void Update_Params(double mu, double sig);
 
+	// Naive Monte Carlo - expected to be slow (Compiler please carry my vectorization)
 	void CalculateMC(unsigned int iteration = 10000, unsigned int mesh = 1, double epsilon = 0.0001, bool storeSamples = false){
 		double H = 0.0, Hsq = 0.0, Heps = 0.0;
 		for (long i = 0; i < iteration; i++)
 		{
 			SamplePath path;
 			GenerateSamplePath(_option->maturity, mesh, path);
-			H = (i / (i + 1.0)) * H + _option->Payoff(path.back()) / (i + 1.0);
-			Hsq = (i / (i + 1.0)) * Hsq + pow(_option->Payoff(path.back()), 2.0) / (i + 1.0);
+			H = (i / (i + 1.0)) * H + _option->Payoff(path) / (i + 1.0);
+			Hsq = (i / (i + 1.0)) * Hsq + pow(_option->Payoff(path), 2.0) / (i + 1.0);
 			Rescale(path, 1.0 + epsilon);
-			Heps = (i / (i + 1.0)) * Heps + _option->Payoff(path.back()) / (i + 1.0);
+			Heps = (i / (i + 1.0)) * Heps + _option->Payoff(path) / (i + 1.0);
 			if (storeSamples)
 				path_hist.push_back(path);
 		}
 		_option->setPremium(exp(-_option->r * _option->tenor) * H);
 		PricingError = exp(-_option->r * _option->tenor) * sqrt(Hsq - H * H) / sqrt(iteration - 1.0);
 		delta = exp(-_option->r * _option->tenor) * (Heps - H) / (_option->underlyers.front().Price() * epsilon);
+	}
+
+	
+	// Pricing using Variance Reduction and Monte Carlo
+	// Here CV stands for Control Variate
+	void CalcVarReducMC(Option& CVOption, unsigned int iteration = 10000, unsigned int mesh = 1, double epsilon = 0.0001, priceProcess type = BS) {
+		DifferenceOfOptions VarRedOpt(_option->tenor, _option->maturity, _option, &CVOption);
+		// assign a similar BS model for VC option
+		auto CVmodel = BSModel(&VarRedOpt);
+		CVmodel.CalculateMC(iteration, mesh, epsilon);
+		// variations depending on complexity and price process: 
+		double Price, Delta;
+		Asset underlyer;
+		switch (type)
+		{
+		case Derivatives::BS:
+			underlyer = CVOption.underlyers.front(); //For now, we consider vanilla BS on one underlyer
+			Price = VarRedOpt.getPremium() + CVOption.PriceByBSFormula(underlyer.Price(), CVOption.impliedVol(), CVOption._r());
+			_option->setPremium(Price);
+			break;
+		case Derivatives::Bachelier:
+			break;
+		case Derivatives::CGMY:
+			break;
+		case Derivatives::LocalVol_Basic:
+			break;
+		case Derivatives::StochVol_Basic:
+			break;
+		default:
+			break;
+		}
 	}
 
 	void Rescale(SamplePath& S, double x)
