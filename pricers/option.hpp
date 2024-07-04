@@ -34,7 +34,6 @@ namespace Derivatives {
             r = b.r;
             _implied_vol = b._implied_vol;
             style = b.style;
-            _premium = b._premium;
             isCall = b.isCall;
         }
         double strike;
@@ -47,7 +46,7 @@ namespace Derivatives {
 
         // this function loads premium -- to be overloaded if PDE solution is present
         double getPremium() {
-            return _premium;
+            return this->Price();
         }
 
         optionStyle getStyle() {
@@ -55,7 +54,7 @@ namespace Derivatives {
         }
 
         void setPremium(double premium){
-            _premium = premium;
+            this->updatePx(premium);
         }
 
         double impliedVol() {
@@ -125,6 +124,13 @@ namespace Derivatives {
         DifferenceOfOptions(double T_, int m_, Option* Ptr1_, Option* Ptr2_)
         {
             tenor = T_; maturity = m_; Ptr1 = Ptr1_; Ptr2 = Ptr2_;
+            // we combine the underlyers from the two to options as our joint asset
+            for (auto& i : Ptr1->underlyers) {
+                underlyers.push_back(i);
+            }
+            for (auto& j : Ptr2->underlyers) {
+                underlyers.push_back(j);
+            }
         }
         double Payoff(SamplePath& S)
         {

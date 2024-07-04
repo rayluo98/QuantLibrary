@@ -20,7 +20,11 @@ int QLabs::_run(int argc, char** argv) {
         auto BSmodel = BSModel(&op1);
         BSmodel.Update_Params();
         BSmodel.CalculateMC(10000, 1000, true);
-        std::cout << "Premium: " << op1.getPremium() << std::endl;
+        std::cout << "MC Premium: " << op1.getPremium() << std::endl;
+        std::cout << "BS Price: " << op1.PriceByBSFormula(stock.Price(), 0.1, 0) << std::endl;
+        EurOption op2(stockList, true, 100, 1.0, 1.0, 0, 0.1);
+        BSmodel.CalcVarReducMC(op2, 10000, 1000, 0.00001);
+        std::cout << "VR Price: " << op1.getPremium() << std::endl;
         //std::cout << "Delta: " << op1.DeltaByBSFormula() << std::endl;
 
         return EXIT_SUCCESS;

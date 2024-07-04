@@ -2,6 +2,7 @@
 #include<cmath>
 #include<string>
 #include<vector>
+#include<map>
 #pragma once
 using namespace std;
 
@@ -22,6 +23,23 @@ class Asset{
 
     public:
         double Price(){return _price;}
+        auto getDivCurve(){
+            std::map<time_t, double> resDiv;
+            if (_discrete_div.size() != _discrete_div_time.size()) //throw error
+                cout << "you need to add error logs properly later you bum" << endl;
+            for (size_t ct = 0; ct < _discrete_div.size(); ++ct) {
+                resDiv.insert(make_pair(_discrete_div_time[ct], _discrete_div[ct]));
+            }
+            return resDiv;
+        }
+
+        double getDivRate(bool recal = false) {
+            if (recal) calcDivRate();
+            return _dividend_rate;
+        }
+        void calcDivRate() {
+            return;
+        }
         void updatePx(double price) { _price = price; }
         void updateQty(double qty) { _quantity = qty; }
         double Quantity(){return _quantity;}
