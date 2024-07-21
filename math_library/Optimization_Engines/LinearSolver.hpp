@@ -200,17 +200,17 @@ public:
     //pick minimum positive index of the last row
     pair<int, int> findPivotIndex(vector<vector<double>> tableau) {
         vector<pair<int, double>> column_choices;
-        int n = tableau.size();
+        size_t n = tableau.size();
         int col = 0;
         double min = DBL_MAX;
-        for (int i = 0; i < tableau[n - 1].size() - 1; ++i) {
+        for (size_t i = 0; i < tableau[n - 1].size() - 1; ++i) {
             if (tableau[n - 1][i] < min){
                 min = tableau[n - 1][i];
-                col = i;
+                col = int(i);
             }
             //column_choices.push_back(make_pair(i, ));
         }
-        int i = 0;
+        size_t i = 0;
         // check if unbounded
         for (i = 0; i < tableau[col].size(); ++i) {
             if (tableau[col][i] > 0) break;
@@ -223,13 +223,13 @@ public:
         vector<pair<int, double>> quotients;
         int row = 0;
         min = DBL_MAX;
-        for (int j = 0; j < tableau.size() - 1; ++j) {
+        for (size_t j = 0; j < tableau.size() - 1; ++j) {
             if (tableau[i][col] > 0) {
                 auto val = tableau[i][tableau[col].size() - 1] / tableau[i][col];
                 quotients.push_back(make_pair(j, val));
                 if (val < min) {
                     min = val;
-                    row = j;
+                    row = int(j);
                 }
             }
         }

@@ -23,7 +23,7 @@ public:
 	// Naive Monte Carlo - expected to be slow (Compiler please carry my vectorization)
 	void CalculateMC(unsigned int iteration = 10000, unsigned int mesh = 1, double epsilon = 0.0001, bool storeSamples = false){
 		double H = 0.0, Hsq = 0.0, Heps = 0.0;
-		for (long i = 0; i < iteration; i++)
+		for (unsigned int i = 0; i < iteration; i++)
 		{
 			SamplePath path;
 			GenerateSamplePath(_option->maturity, mesh, path);
@@ -72,8 +72,8 @@ public:
 
 	void Rescale(SamplePath& S, double x)
 	{
-		int m = S.size();
-		for (int j = 0; j < m; j++) S[j] = x * S[j];
+		size_t m = S.size();
+		for (size_t j = 0; j < m; j++) S[j] = x * S[j];
 	}
 
 private:
