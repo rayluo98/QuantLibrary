@@ -121,7 +121,7 @@ namespace Derivatives {
     public:
         Option* Ptr1;
         Option* Ptr2;
-        DifferenceOfOptions(double T_, int m_, Option* Ptr1_, Option* Ptr2_)
+        DifferenceOfOptions(double T_, double m_, Option* Ptr1_, Option* Ptr2_)
         {
             tenor = T_; maturity = m_; Ptr1 = Ptr1_; Ptr2 = Ptr2_;
             // we combine the underlyers from the two to options as our joint asset

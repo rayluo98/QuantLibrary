@@ -6,4 +6,7 @@
 
 using namespace std;
 
-class OptimizationEngine{};
+class OptimizationEngine{
+public: 
+	OptimizationEngine();
+};

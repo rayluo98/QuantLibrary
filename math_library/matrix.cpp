@@ -41,10 +41,10 @@ namespace MatLib
         }
     }
 
-    Matrix::Matrix(Matrix::Matrix& mat){
-        auto dims = mat.get_dims();
-        row_num = dims.item1;
-        col_num = dims.item2;
+    Matrix::Matrix(Matrix& mat){
+        auto dims = mat.get_dim();
+        row_num = dims.first;
+        col_num = dims.second;
         initialize();
         for (int i = 0; i < row_num; i++)
         {

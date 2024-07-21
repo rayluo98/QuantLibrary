@@ -275,6 +275,7 @@ public:
 
 };
 
+/*
 int main()
 {
     vector<double> c = { 300, 250, 450 };
@@ -289,4 +290,4 @@ int main()
     c.push_back(0); c.push_back(0); c.push_back(0); c.push_back(0);
 
     Simplex simplexSolver = Simplex(c, A, b);
-}
+}*/

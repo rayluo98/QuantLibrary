@@ -48,7 +48,7 @@ public:
 		auto CVmodel = BSModel(&VarRedOpt);
 		CVmodel.CalculateMC(iteration, mesh, epsilon);
 		// variations depending on complexity and price process: 
-		double Price, Delta;
+		double Price;//, Delta;
 		Asset underlyer;
 		switch (type)
 		{
