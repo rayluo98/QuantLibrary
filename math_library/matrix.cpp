@@ -4,6 +4,11 @@ using namespace std;
 
 namespace MatLib
 {
+    Matrix::Matrix() {
+        row_num = 0; col_num = 0;
+        initialize();
+    }
+
     Matrix::Matrix(int rows, int cols)
     {
         row_num = rows;
@@ -14,6 +19,38 @@ namespace MatLib
             for (int j = 0; j < col_num; j++)
             {
                 p[i][j] = 0;
+            }
+        }
+    }
+
+    Matrix::Matrix(vector<vector<double>> vec) {
+        row_num = vec.size();
+        if (row_num == 0) {
+            col_num = 0;
+        }
+        else {
+            col_num = vec[0].size();
+        }
+        initialize();
+        for (int i = 0; i < row_num; i++)
+        {
+            for (int j = 0; j < col_num; j++)
+            {
+                p[i][j] = vec[i][j];
+            }
+        }
+    }
+
+    Matrix::Matrix(Matrix::Matrix& mat){
+        auto dims = mat.get_dims();
+        row_num = dims.item1;
+        col_num = dims.item2;
+        initialize();
+        for (int i = 0; i < row_num; i++)
+        {
+            for (int j = 0; j < col_num; j++)
+            {
+                p[i][j] = mat(i,j);
             }
         }
     }
@@ -44,6 +81,10 @@ namespace MatLib
     std::pair<int, int> Matrix::get_dim()
     {
         return make_pair(row_num, col_num);
+    }
+
+    double Matrix::operator()(int a, int b){
+        return p[a][b];
     }
 
     Matrix &Matrix::operator=(double *a)
