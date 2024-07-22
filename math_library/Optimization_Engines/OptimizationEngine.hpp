@@ -8,5 +8,5 @@ using namespace std;
 
 class OptimizationEngine{
 public: 
-	OptimizationEngine();
+	//OptimizationEngine() {};
 };
