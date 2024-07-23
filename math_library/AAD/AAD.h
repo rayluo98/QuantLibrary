@@ -1,19 +1,3 @@
-
-/*
-Written by Antoine Savine in 2018
-
-This code is the strict IP of Antoine Savine
-
-License to use and alter this code for personal and commercial applications 
-is freely granted to any person or company who purchased a copy of the book
-
-Modern Computational Finance: AAD and Parallel Simulations
-Antoine Savine
-Wiley, 2018
-
-As long as this comment is preserved at the top of the file
-*/
-
 #pragma once
 
 #include <memory>
@@ -21,8 +5,6 @@ As long as this comment is preserved at the top of the file
 //  So we can instrument Gaussians like standard math functions
 #include "../gaussians.h"
 
-//  Use traditional AAD of chapter 10 (false)
-//      or expression templated (AADET) of chapter 15 (true)
 #define AADET   true
 
 #if AADET
@@ -34,9 +16,6 @@ As long as this comment is preserved at the top of the file
 #include "AADNumber.h"
 
 #endif
-
-//  Routines for multi-dimensional AAD (chapter 14)
-//  Set static context for multi-dimensional AAD
 
 //	RAII: reset dimension 1 on destruction
 struct numResultsResetterForAAD
