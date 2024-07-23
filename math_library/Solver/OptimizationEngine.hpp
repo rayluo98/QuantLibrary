@@ -6,7 +6,9 @@
 
 using namespace std;
 
-class OptimizationEngine{
-public: 
-	//OptimizationEngine() {};
-};
+namespace SolverLib {
+	class OptimizationEngine {
+	public:
+		//OptimizationEngine() {};
+	};
+}
