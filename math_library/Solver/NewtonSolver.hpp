@@ -2,6 +2,7 @@
 // solving equations
 #include<bits/stdc++.h>
 #include<functional>
+#include"../AAD/AAD.cpp"
 using namespace std;
 
 
@@ -19,26 +20,42 @@ namespace SolverLib {
     class NewtonMethod :Solver {
         // An example function whose solution is determined using
         // Bisection Method. The function is x^3 - x^2  + 2
-        double func(double x)
-        {
-            return x * x * x - x * x + 2;
+    public:
+        bool hasGrad;
+
+        NewtonMethod(double (*_func)(double), double (*_grad)(double)):
+            Solver(_func, _grad) {
+            hasGrad = true;
         }
 
-        // Derivative of the above function which is 3*x^x - 2*x
-        double derivFunc(double x)
-        {
-            return 3 * x * x - 2 * x;
+        NewtonMethod(double (*_func)(double)) {
+            hasGrad = false;
         }
 
         // Function to find the root
         double newtonRaphson(double x, double EPSILON = 0.0001)
         {
-            double h = func(x) / derivFunc(x);
+            double h;
+            if (hasGrad) {
+                h = func(x) / derivFunc(x);
+            }
+            else { // use adjoints to calculate grad
+                Number input[1] = { x };
+                Number y = func(input);
+                y.propagateAdjoints();
+                h = y.value() / input[0].adjoint();
+            }
             while (abs(h) >= EPSILON)
             {
-                h = func(x) / derivFunc(x);
-
-                // x(i+1) = x(i) - f(x) / f'(x)  
+                if (hasGrad) {
+                    h = func(x) / derivFunc(x);
+                }
+                else { // use adjoints to calculate grad
+                    Number input[1] = { x };
+                    Number y = func(input);
+                    y.propagateAdjoints();
+                    h = y.value() / input[0].adjoint();
+                }
                 x = x - h;
             }
 
