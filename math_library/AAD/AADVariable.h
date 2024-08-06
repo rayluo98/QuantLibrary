@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include "AADTape.h"
+#include <stdexcept>
 
 class Variable
 {

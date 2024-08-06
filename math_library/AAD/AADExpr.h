@@ -919,13 +919,13 @@ public:
 
     Number() {}
 
-    explicit Number(const double val) : myValue(val)
+    explicit Number( double val) : myValue(val)
     {
         //  Create leaf
         myNode = createMultiNode<0>();
     }
 
-    Number& operator=(const double val)
+    Number& operator=( double val)
     {
         myValue = val;
         //  Create leaf

@@ -20,6 +20,7 @@ As long as this comment is preserved at the top of the file
 
 #include <algorithm>
 #include "AADTape.h"
+#include <stdexcept>
 
 class Variable
 {
