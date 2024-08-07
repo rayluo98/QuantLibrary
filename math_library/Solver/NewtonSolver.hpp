@@ -4,54 +4,63 @@
 //#include<bits/stdc++.h>
 #include<functional>
 #include"../AAD/AAD.h"
-#include <SolverTest.cpp>
+#include "QuantLibrary\math_library\Solver\SolverTest.cpp"
 #include <iostream>
 
 using namespace std;
-
+typedef double (*func)(double);
+typedef double (*grad)(double);
 
 namespace SolverLib {
 
-    template<class T>
     class Solver {
+
+
+        func myFunc;
+        grad myGrad;
+
     public:
-        function<(T)> func;
-        function<T(T)> grad;
-        Solver(T(*_func)(T), T(*_grad)(T)) {
-            func = _func;
-            grad = _grad;
+
+        Solver(double (*_func)(double), double(*_grad)(double)) {
+            this->myFunc = &_func;
+            this->myGrad = &_grad;
+        }
+        Solver(double(*_func)(double)) {
+            myFunc = &_func;
         }
         Solver(){}
     };
 
-
-    template<class T>
-    class NewtonMethod : Solver<T> {
+    template<typename T>
+    class NewtonMethod : Solver{
         // An example function whose solution is determined using
         // Bisection Method. The function is x^3 - x^2  + 2
     public:
         bool hasGrad;
 
         NewtonMethod(T (*_func)(T), T (*_grad)(T)):
-            Solver(_func, _grad) {
+            Solver(*_func, *_grad) {
             hasGrad = true;
         }
 
-        NewtonMethod(T (*_func)(T)) {
+        NewtonMethod(T(*_func)(T)) : Solver(*_func){
             hasGrad = false;
         }
+
+        NewtonMethod() {}
 
         // Function to find the root
         double newtonRaphson(double x, double EPSILON = 0.0001)
         {
             double h;
             Number::tape->rewind();
+            auto guess = Number(x);
             if (hasGrad) {
                 h = func(x) / grad(x);
             }
             else { // use adjoints to calculate grad
-                Number input[1] = { x };
-                Number y = func(input);
+                Number input[1] = { guess };
+                Number y = func(input->value);
                 y.propagateAdjoints();
                 h = y.value() / input[0].adjoint();
             }
