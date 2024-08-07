@@ -906,7 +906,7 @@ public:
         //  note n: index of this number on the node on tape
 
         //  Register adjoint
-        exprNode.pAdjPtrs[n] = Tape::multi? myNode->pAdjoints : &myNode->mAdjoint;
+        exprNode.pAdjPtrs[n] = Tape::multi? &(myNode->adjoint(n)) : &(myNode->adjoint());
 		
         //  Register derivative
         exprNode.pDerivatives[n] = adjoint;

@@ -4,7 +4,6 @@
 //#include<bits/stdc++.h>
 #include<functional>
 #include"../AAD/AAD.h"
-#include "QuantLibrary\math_library\Solver\SolverTest.cpp"
 #include <iostream>
 
 using namespace std;
@@ -22,11 +21,11 @@ namespace SolverLib {
     public:
 
         Solver(double (*_func)(double), double(*_grad)(double)) {
-            this->myFunc = &_func;
-            this->myGrad = &_grad;
+            this->myFunc = _func;
+            this->myGrad = _grad;
         }
         Solver(double(*_func)(double)) {
-            myFunc = &_func;
+            myFunc = _func;
         }
         Solver(){}
     };
@@ -56,22 +55,22 @@ namespace SolverLib {
             Number::tape->rewind();
             auto guess = Number(x);
             if (hasGrad) {
-                h = func(x) / grad(x);
+                h = myFunc(x) / myGrad(x);
             }
             else { // use adjoints to calculate grad
-                Number input[1] = { guess };
-                Number y = func(input->value);
+                Number input[1] = { x };
+                Number y = myFunc(input);
                 y.propagateAdjoints();
                 h = y.value() / input[0].adjoint();
             }
             while (abs(h) >= EPSILON)
             {
                 if (hasGrad) {
-                    h = func(x) / derivFunc(x);
+                    h = myFunc(x) / myGrad(x);
                 }
                 else { // use adjoints to calculate grad
                     Number input[1] = { x };
-                    Number y = func(input);
+                    Number y = myFunc(input);
                     y.propagateAdjoints();
                     h = y.value() / input[0].adjoint();
                 }

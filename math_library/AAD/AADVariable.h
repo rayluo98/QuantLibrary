@@ -6,6 +6,7 @@
 #include <algorithm>
 #include "AADTape.h"
 #include <stdexcept>
+#include "../gaussians.h"
 
 class Variable
 {

@@ -11,5 +11,6 @@ namespace SolverTest {
 	int main(int argc, char** argv)
 	{
 		auto solvTest = new SolverLib::NewtonMethod<double>(f);
+		return 0;
 	};
 }
