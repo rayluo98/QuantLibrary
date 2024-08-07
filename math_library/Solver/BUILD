@@ -6,3 +6,12 @@ cc_library (
     hdrs = glob(["*.h", "*.hpp"]),
     visibility = ["//visibility:public"],
 )
+
+cc_binary (
+    name = "solver_test",
+    srcs = ["SolverTest.cpp"],
+    deps = [
+            "optimization_engines",
+            "//math_library/AAD:AAD",
+        ],
+)
