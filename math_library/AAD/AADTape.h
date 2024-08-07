@@ -26,9 +26,6 @@ constexpr size_t DATASIZE   = 65536;		//	Data in bytes
 
 class Tape
 {
-	//	Working with multiple results / adjoints?
-	static bool							multi;
-
 	//  Storage for adjoints in multi-dimensional case (chapter 14)
     blocklist<double, ADJSIZE>			myAdjointsMulti;
     
@@ -47,6 +44,8 @@ class Tape
 	friend class Number;
 
 public:
+    //	Working with multiple results / adjoints?
+    static bool							multi;
 
     //  Build note in place and return a pointer
 	//	N : number of childs (arguments)

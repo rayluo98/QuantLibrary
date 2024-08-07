@@ -33,14 +33,6 @@ class Node
 	//	in multi case, held separately and accessed by pointer 
     double*         pAdjoints;  
 
-	//  Data lives in separate memory
-
-    //  the n derivatives to arguments,
-    double*         pDerivatives;    
-
-    //  the n pointers to the adjoints of arguments
-    double**        pAdjPtrs;
-
     //  Variable of adjoints (results) to propagate, usually 1
     //  See chapter 14
     static size_t   numAdj;
@@ -49,6 +41,14 @@ class Node
     const size_t    n;
 
 public:
+
+    //  Data lives in separate memory
+
+    //  the n derivatives to arguments,
+    double* pDerivatives;
+
+    //  the n pointers to the adjoints of arguments
+    double** pAdjPtrs;
 
     Node(const size_t N = 0) : n(N) {}
 
