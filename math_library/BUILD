@@ -3,7 +3,7 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 cc_library (
     name = "math_library",
     srcs = ["matrix.cpp"],
-    hdrs = ["matrix.h"],
+    hdrs = ["matrix.h", "gaussians.h"],
     visibility = ["//visibility:public"],
 )
 

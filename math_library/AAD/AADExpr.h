@@ -879,8 +879,8 @@ class Number : public Expression<Number>
         auto* node = createMultiNode<E::numNumbers>();
         
         //  Push adjoints through expression with adjoint = 1 on top
-        static_cast<const E&>(e).pushAdjoint<E::numNumbers, 0>(*node, 1.0);
-
+        //  TODO(hananli): Verify that this shit actually works
+        static_cast<const E&>(e)::template static_cast<const E&>(e).pushAdjoint<E::numNumbers, 0>(*node, 1.0);
         //  Set my node
         myNode = node;
     }

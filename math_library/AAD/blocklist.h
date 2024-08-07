@@ -20,6 +20,8 @@ As long as this comment is preserved at the top of the file
 #include <array>
 #include <list>
 #include <iterator>
+#include <cstring>
+#include <math.h>
 using namespace std;
 
 template <class T, size_t block_size>
