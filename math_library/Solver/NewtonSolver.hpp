@@ -3,91 +3,78 @@
 #pragma once
 //#include<bits/stdc++.h>
 #include<functional>
-#include"../AAD/AAD.h"
+#include"../AAD/AAD.cpp"
 #include <iostream>
 
 using namespace std;
-typedef double (*func)(double);
-typedef double (*grad)(double);
+typedef Number (*func)(Number);
+typedef Number(*grad)(Number);
 
-namespace SolverLib {
+#define EPSILON 0.0001
 
-    class Solver {
+class Solver {
 
+public:
+    func myFunc;
+    grad myGrad;
 
-        func myFunc;
-        grad myGrad;
+    Solver(Number(*_func)(Number), Number(*_grad)(Number)) {
+        this->myFunc = _func;
+        this->myGrad = _grad;
+    }
+    Solver(Number(*_func)(Number)) {
+        myFunc = _func;
+    }
+    Solver(){}
+};
 
-    public:
+class NewtonMethod : Solver{
+    // An example function whose solution is determined using
+    // Bisection Method. The function is x^3 - x^2  + 2
+public:
+    bool hasGrad;
 
-        Solver(double (*_func)(double), double(*_grad)(double)) {
-            this->myFunc = _func;
-            this->myGrad = _grad;
+    NewtonMethod(Number(*_func)(Number), Number(*_grad)(Number)):
+        Solver(*_func, *_grad) {
+        hasGrad = true;
+    }
+
+    NewtonMethod(Number(*_func)(Number)) : Solver(*_func){
+        hasGrad = false;
+    }
+
+    NewtonMethod() {}
+
+    // Function to find the root
+    double newtonRaphson(double x, double eps = EPSILON)
+    {
+        Number h;
+        Number::tape->rewind();
+        auto guess = Number(x);
+        if (hasGrad) {
+            h = myFunc(guess) / myGrad(guess);
         }
-        Solver(double(*_func)(double)) {
-            myFunc = _func;
+        else { // use adjoints to calculate grad
+            Number input = guess;
+            Number y(myFunc(input));
+            h = y / input.adjoint();
         }
-        Solver(){}
-    };
-
-    template<typename T>
-    class NewtonMethod : Solver{
-        // An example function whose solution is determined using
-        // Bisection Method. The function is x^3 - x^2  + 2
-    public:
-        bool hasGrad;
-
-        NewtonMethod(T (*_func)(T), T (*_grad)(T)):
-            Solver(*_func, *_grad) {
-            hasGrad = true;
-        }
-
-        NewtonMethod(T(*_func)(T)) : Solver(*_func){
-            hasGrad = false;
-        }
-
-        NewtonMethod() {}
-
-        // Function to find the root
-        double newtonRaphson(double x, double EPSILON = 0.0001)
+        while (abs(h.value()) >= eps)
         {
-            double h;
-            Number::tape->rewind();
-            auto guess = Number(x);
             if (hasGrad) {
-                h = myFunc(x) / myGrad(x);
+                h = myFunc(guess) / myGrad(guess);
             }
             else { // use adjoints to calculate grad
-                Number input[1] = { x };
-                Number y = myFunc(input);
-                y.propagateAdjoints();
-                h = y.value() / input[0].adjoint();
+                Number input = guess;
+                Number y(myFunc(guess));
+                y.propagateToStart();
+                h = y.value() / input.adjoint();
             }
-            while (abs(h) >= EPSILON)
-            {
-                if (hasGrad) {
-                    h = myFunc(x) / myGrad(x);
-                }
-                else { // use adjoints to calculate grad
-                    Number input[1] = { x };
-                    Number y = myFunc(input);
-                    y.propagateAdjoints();
-                    h = y.value() / input[0].adjoint();
-                }
-                x = x - h;
-            }
-
-            return x;
+            guess = guess - h;
+            cout << "Error: " << h.value() << endl;
         }
 
-    };
-    
-    /*
-    // Driver program to test above
-    int main()
-    {
-        double x0 = -20; // Initial values assumed
-        cout << "The value of the root is : " << SolverLib::NewtonMethod<Number>::newtonRaphson(x0);
-        return 0;
-    }*/
-}
+        return guess.value();
+    }
+
+};

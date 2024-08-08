@@ -17,7 +17,7 @@ As long as this comment is preserved at the top of the file
 
 //  Traditional AAD implementation 
 //  The custom variable type
-
+#pragma once
 #include <algorithm>
 #include "AADTape.h"
 #include <stdexcept>

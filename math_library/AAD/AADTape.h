@@ -43,9 +43,10 @@ class Tape
     friend struct numResultsResetterForAAD;
 	friend class Number;
 
-public:
     //	Working with multiple results / adjoints?
     static bool							multi;
+
+public:
 
     //  Build note in place and return a pointer
 	//	N : number of childs (arguments)

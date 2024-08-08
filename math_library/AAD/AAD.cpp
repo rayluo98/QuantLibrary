@@ -1,6 +1,8 @@
 #include "AAD.h"
 #include <algorithm>
 
+#pragma once
+
 /*
 Written by Antoine Savine in 2018
 
@@ -22,4 +24,4 @@ size_t Node::numAdj = 1;
 bool Tape::multi = false;
 
 Tape globalTape;
-thread_local Tape* Variable::tape = &globalTape;
+thread_local Tape* Number::tape = &globalTape;
