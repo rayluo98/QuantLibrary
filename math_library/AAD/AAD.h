@@ -3,7 +3,7 @@
 #include <memory>
 
 //  So we can instrument Gaussians like standard math functions
-#include "math_library/gaussians.h"
+#include "../gaussians.h"
 
 #define AADET   true
 

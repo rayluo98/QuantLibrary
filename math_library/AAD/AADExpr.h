@@ -361,6 +361,45 @@ public:
 
 //  The unary operators
 
+struct OPCos {
+    static const double eval(const double r, const double d)
+    {
+        return cos(r);
+    }
+
+    static const double derivative
+    (const double r, const double v, const double d)
+    {
+        return -sin(r);
+    }
+};
+
+struct OPSin {
+    static const double eval(const double r, const double d)
+    {
+        return sin(r);
+    }
+
+    static const double derivative
+    (const double r, const double v, const double d)
+    {
+        return cos(r);
+    }
+};
+
+struct OPTan {
+    static const double eval(const double r, const double d)
+    {
+        return tan(r);
+    }
+
+    static const double derivative
+    (const double r, const double v, const double d)
+    {
+        return 1/(cos(r)*cos(r));
+    }
+};
+
 struct OPExp
 {
     static const double eval(const double r, const double d) 
@@ -604,6 +643,24 @@ template <class ARG>
 { 
     return UnaryExpression<ARG, OPExp>(arg);
 }
+
+ template <class ARG>
+ UnaryExpression<ARG, OPCos> cos(const Expression<ARG>& arg)
+ {
+     return UnaryExpression<ARG, OPCos>(arg);
+ }
+
+ template <class ARG>
+ UnaryExpression<ARG, OPSin> sin(const Expression<ARG>& arg)
+ {
+     return UnaryExpression<ARG, OPSin>(arg);
+ }
+
+ template <class ARG>
+ UnaryExpression<ARG, OPExp> tan(const Expression<ARG>& arg)
+ {
+     return UnaryExpression<ARG, OPTan>(arg);
+ }
 
 template <class ARG>
  UnaryExpression<ARG, OPLog> log(const Expression<ARG>& arg)
@@ -879,8 +936,7 @@ class Number : public Expression<Number>
         auto* node = createMultiNode<E::numNumbers>();
         
         //  Push adjoints through expression with adjoint = 1 on top
-        //  TODO(hananli): Verify that this shit actually works
-        static_cast<const E&>(e)::template static_cast<const E&>(e).pushAdjoint<E::numNumbers, 0>(*node, 1.0);
+        static_cast<const E&>(e).pushAdjoint<E::numNumbers, 0>(*node, 1.0);
         //  Set my node
         myNode = node;
     }

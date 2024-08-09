@@ -522,6 +522,39 @@ public:
         return result;
     }
 
+    inline friend Variable cos(const Variable& arg)
+    {
+        const double e = cos(arg.value());
+        //  Eagerly evaluate and put on tape
+        Variable result(arg.node(), e);
+        //  Eagerly compute derivatives
+        result.derivative() = -1 * sin(arg.value());
+
+        return result;
+    }
+
+    inline friend Variable sin(const Variable& arg)
+    {
+        const double e = sin(arg.value());
+        //  Eagerly evaluate and put on tape
+        Variable result(arg.node(), e);
+        //  Eagerly compute derivatives
+        result.derivative() = -1 * cos(arg.value());
+
+        return result;
+    }
+
+    inline friend Variable tan(const Variable& arg)
+    {
+        const double e = tan(arg.value());
+        //  Eagerly evaluate and put on tape
+        Variable result(arg.node(), e);
+        //  Eagerly compute derivatives
+        result.derivative() = 1/cos(arg.value())^2;
+
+        return result;
+    }
+
     inline friend Variable log(const Variable& arg)
     {
 		const double e = log(arg.value());
