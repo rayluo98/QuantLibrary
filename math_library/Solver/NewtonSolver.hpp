@@ -28,6 +28,8 @@ public:
     Solver(){}
 };
 
+// note that the issues with Newton's method is that it doesn't consider straddle points well
+
 class NewtonMethod : Solver{
     // An example function whose solution is determined using
     // Bisection Method. The function is x^3 - x^2  + 2
@@ -57,6 +59,12 @@ public:
         else { // use adjoints to calculate grad
             Number input = guess;
             Number y(myFunc(input));
+            if (input.adjoint()) {
+                throw exception("Gradient is zero! Straddle alert!");
+            }
+            else if (y == 0) {
+                return x;
+            }
             h = y / input.adjoint();
         }
         while (abs(h.value()) >= eps)
@@ -68,6 +76,12 @@ public:
                 Number input = guess;
                 Number y(myFunc(guess));
                 y.propagateToStart();
+                if (input.adjoint()) {
+                    throw exception("Gradient is zero! Straddle alert!");
+                }
+                else if (y == 0) {
+                    return y.value();
+                }
                 h = y.value() / input.adjoint();
             }
             guess = guess - h;

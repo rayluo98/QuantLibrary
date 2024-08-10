@@ -1,7 +1,13 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\market",
+    "\\market_referential",
+    "\\math_library",
+    "\\math_library\\Solver",
+    "\\math_library_example",
+    "\\pricers"
   ],
-  "SelectedNode": "\\main.cc",
+  "SelectedNode": "\\math_library\\Solver\\NewtonSolver.hpp",
   "PreviewInSolutionExplorer": false
 }
