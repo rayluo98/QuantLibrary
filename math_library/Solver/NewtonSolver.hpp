@@ -8,7 +8,9 @@
 
 using namespace std;
 typedef Number (*func)(Number);
-typedef Number(*grad)(Number);
+typedef Number(*grad)(Number); 
+typedef double(*func_dbl)(double);
+typedef double(*grad_dbl)(double);
 
 #define EPSILON 0.0001
 
@@ -24,6 +26,13 @@ public:
     }
     Solver(Number(*_func)(Number)) {
         myFunc = _func;
+    }
+    Solver(double(*_func)(double)) {
+        myFunc = reinterpret_cast<func>(_func);
+    }
+    Solver(double(*_func)(double), double(*_grad)(double)) {
+        myFunc = reinterpret_cast<func>(_func);
+        myGrad = reinterpret_cast<grad>(_grad);
     }
     Solver(){}
 };
@@ -42,6 +51,14 @@ public:
     }
 
     NewtonMethod(Number(*_func)(Number)) : Solver(*_func){
+        hasGrad = false;
+    }
+
+    NewtonMethod(double(*_func)(double), double(*_grad)(double)) : Solver(*_func, *_grad) {
+        hasGrad = true;
+    }
+
+    NewtonMethod(double(*_func)(double)) : Solver(*_func){
         hasGrad = false;
     }
 
