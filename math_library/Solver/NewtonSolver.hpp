@@ -17,22 +17,23 @@ typedef double(*grad_dbl)(double);
 class Solver {
 
 public:
-    func myFunc;
-    grad myGrad;
+    std::function<Number(Number)> myFunc;
+    std::function<Number(Number)> myGrad;
 
-    Solver(Number(*_func)(Number), Number(*_grad)(Number)) {
+    Solver(std::function<Number(Number)>_func, std::function<Number(Number)>_grad) {
         this->myFunc = _func;
         this->myGrad = _grad;
     }
     Solver(Number(*_func)(Number)) {
         myFunc = _func;
     }
-    Solver(double(*_func)(double)) {
-        myFunc = reinterpret_cast<func>(_func);
+    Solver(std::function<double(double)>_func, std::function<double(double)>_grad){
+        myFunc = [_func](Number x) {return Number(_func(x.value())); };
+        myGrad = [_grad](Number x) {return Number(_grad(x.value())); };
     }
-    Solver(double(*_func)(double), double(*_grad)(double)) {
-        myFunc = reinterpret_cast<func>(_func);
-        myGrad = reinterpret_cast<grad>(_grad);
+
+    Solver(double(*_func)(double)){
+        myFunc = [_func](Number x) {return Number(_func(x.value())); };
     }
     Solver(){}
 };
@@ -45,8 +46,8 @@ class NewtonMethod : Solver{
 public:
     bool hasGrad;
 
-    NewtonMethod(Number(*_func)(Number), Number(*_grad)(Number)):
-        Solver(*_func, *_grad) {
+    NewtonMethod(std::function<Number(Number)>_func, std::function<Number(Number)>_grad):
+        Solver(_func, _grad) {
         hasGrad = true;
     }
 
@@ -67,7 +68,7 @@ public:
     // Function to find the root
     double newtonRaphson(double x, double eps = EPSILON)
     {
-        Number h;
+        Number h = Number(x);
         Number::tape->rewind();
         auto guess = Number(x);
         if (hasGrad) {
@@ -76,10 +77,9 @@ public:
         else { // use adjoints to calculate grad
             Number input = guess;
             Number y(myFunc(input));
-            if (input.adjoint()) {
-                throw exception("Gradient is zero! Straddle alert!");
-            }
-            else if (y == 0) {
+            y.propagateToStart();
+            
+            if (abs(y.value()) < eps) {
                 return x;
             }
             h = y / input.adjoint();
@@ -93,11 +93,8 @@ public:
                 Number input = guess;
                 Number y(myFunc(guess));
                 y.propagateToStart();
-                if (input.adjoint()) {
-                    throw exception("Gradient is zero! Straddle alert!");
-                }
-                else if (y == 0) {
-                    return y.value();
+                if (abs(y.value()) < eps or input.adjoint() == 0) {
+                    break;
                 }
                 h = y.value() / input.adjoint();
             }

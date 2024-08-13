@@ -14,6 +14,10 @@ Number h(Number x) {
 	return x*pow((1+pow(x,2)),-1/2);
 }
 
+double dbl_f(double x) {
+	return x * x - 100;
+}
+
 namespace SolverTest {
 	int main(int argc, char** argv)
 	{
@@ -22,6 +26,10 @@ namespace SolverTest {
 
 		solvTest = new NewtonMethod(g);
 		assert(abs(solvTest->newtonRaphson(10) - 0.865474) < EPSILON);
+
+		// this didn't work
+		//solvTest = new NewtonMethod(dbl_f);
+		//assert(abs(solvTest->newtonRaphson(100) - 10) < EPSILON);
 
 		solvTest = new NewtonMethod(h);
 		//assert(abs(solvTest->newtonRaphson(10) - 0) > EPSILON); // this is known not to converge actually
