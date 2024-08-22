@@ -1,5 +1,5 @@
 #include"derivatives.hpp"
-
+#include"../math_library/Solver/NewtonSolver.hpp"
 /*
 # The philosophy to this code base is as follows: we treat models as wrappers on top of contracts to reduce the load information storage
 # Each derivatives contract is designed to have flexible contract details acts as a wrapper on top of some underlying asset(s)
@@ -67,8 +67,50 @@ namespace Derivatives {
         }
 
         virtual double PriceByBSFormula(double S0, double sigma, double r) { return 0.0; };
+        // overload class as a function for PV to enable AAD
+        // this CRPT to work as we need to override static function for AAD to work
+        //static Number PVbyFormula(Number sigma) { return Number(); };
 
+        void _fitIV(double px=0, bool useVega = false) {
+            if (px != 0){
+                setPremium(px);
+            }
+            // unfortunately cannot reference a member function as member function pointer is not convertible to functor in C
+            auto PVbyFormula = [this](Number x) {
+                auto S0 = underlyers.front().Price();
+                auto d1 = log(S0 / strike) / x / sqrt(tenor) + (r + 0.5 * x * x) * tenor / x / sqrt(tenor);
+                auto d2 = d1 - x * sqrt(tenor);
+                
+                //auto std = (x * sqrt(tenor));
+                //return S0 * normalCdf(log(S0 / strike) / x / sqrt(tenor) + (r + 0.5 * pow(x, 2)) * tenor / x / sqrt(tenor))
+                //    - strike * exp(-r * tenor) * normalCdf(log(S0 / strike) / x / sqrt(tenor) - (r + 0.5 * pow(x, 2)) * tenor / x / sqrt(tenor))
+                // -_premium;
+                
+                return S0 * normalCdf(d1) - strike * exp(-r * tenor) * normalCdf(d2) - _premium;
+            };
 
+            auto VegaByFormula = [this](Number x) {
+                auto S0 = underlyers.front().Price();
+                //auto std = (x * sqrt(tenor));
+                return normalDens(log(S0 / strike) / (x * sqrt(tenor)) + (r + 0.5 * x * x) * tenor / (x * sqrt(tenor))) * S0 * sqrt(tenor);
+            };
+
+            auto ivSolver = new NewtonMethod(PVbyFormula);
+            // initial guess should be inflexion point of Call_BS(sigma)
+            // I = sqrt(2 * log(m)/T), where m is moneyness = S/(K*exp(-r*tenor))
+             double guess = sqrt(2 * log(abs(underlyers.front().Price() / strike / exp(-r * tenor)))/tenor);
+
+            if (useVega) {
+                auto ivSolver = new NewtonMethod(PVbyFormula, VegaByFormula);
+                _implied_vol = ivSolver->newtonRaphson(guess, 1.0E-10);
+            }
+            else {
+                auto ivSolver = new NewtonMethod(PVbyFormula);
+                _implied_vol = ivSolver->newtonRaphson(guess, 1.0E-10);
+            }
+        };
+
+        virtual void _fitIVS() {};
 
     private:
         double _premium;
@@ -98,7 +140,8 @@ namespace Derivatives {
     double EurOption::d_plus(double S0, double sigma, double r)
     {
         return (log(S0 / strike) + (r + 0.5 * pow(sigma, 2.0)) * tenor) / (sigma * sqrt(tenor));
-    }
+    }   
+
     double EurOption::d_minus(double S0, double sigma, double r)
     {
         return d_plus(S0, sigma, r) - sigma * sqrt(tenor);

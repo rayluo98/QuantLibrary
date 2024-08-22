@@ -12,9 +12,9 @@ enum TickerType {
 
 class Asset{
     private:
-        double _price;
-        double _quantity;
-        double _dividend_rate; // generic cash flow rate (assuming yield... better would have discrete dividend)
+        double _price=0;
+        double _quantity=0;
+        double _dividend_rate=0; // generic cash flow rate (assuming yield... better would have discrete dividend)
         vector<double> _discrete_div;
         vector<time_t> _discrete_div_time;
         std::string _ticker;
@@ -42,6 +42,7 @@ class Asset{
         }
         void updatePx(double price) { _price = price; }
         void updateQty(double qty) { _quantity = qty; }
+        void updateDiv(double div) { _dividend_rate = div; }
         double Quantity(){return _quantity;}
         void setQuantity(double quantity){_quantity = quantity;}
         std::string Ticker(){return _ticker;}
@@ -60,4 +61,5 @@ class Asset{
         //virtual void Update() = 0;
         void Update(double px, double qty) { _price = px; _quantity = qty; };
         Asset() : _price(0), _quantity(0) {}
+
 };

@@ -50,24 +50,9 @@ public:
 		// variations depending on complexity and price process: 
 		double Price;//, Delta;
 		Asset underlyer;
-		switch (type)
-		{
-		case Derivatives::BS:
-			underlyer = CVOption.underlyers.front(); //For now, we consider vanilla BS on one underlyer
-			Price = VarRedOpt.getPremium() + CVOption.PriceByBSFormula(underlyer.Price(), CVOption.impliedVol(), CVOption._r());
-			_option->setPremium(Price);
-			break;
-		case Derivatives::Bachelier:
-			break;
-		case Derivatives::CGMY:
-			break;
-		case Derivatives::LocalVol_Basic:
-			break;
-		case Derivatives::StochVol_Basic:
-			break;
-		default:
-			break;
-		}
+		underlyer = CVOption.underlyers.front(); //For now, we consider vanilla BS on one underlyer
+		Price = VarRedOpt.getPremium() + CVOption.PriceByBSFormula(underlyer.Price(), CVOption.impliedVol(), CVOption._r());
+		_option->setPremium(Price);
 	}
 
 	void Rescale(SamplePath& S, double x)

@@ -24,7 +24,7 @@ public:
         this->myFunc = _func;
         this->myGrad = _grad;
     }
-    Solver(Number(*_func)(Number)) {
+    Solver(std::function<Number(Number)>_func) {
         myFunc = _func;
     }
     Solver(std::function<double(double)>_func, std::function<double(double)>_grad){
@@ -51,7 +51,7 @@ public:
         hasGrad = true;
     }
 
-    NewtonMethod(Number(*_func)(Number)) : Solver(*_func){
+    NewtonMethod(std::function<Number(Number)>_func) : Solver(_func){
         hasGrad = false;
     }
 
@@ -68,41 +68,35 @@ public:
     // Function to find the root
     double newtonRaphson(double x, double eps = EPSILON)
     {
-        Number h = Number(x);
         Number::tape->rewind();
-        auto guess = Number(x);
+        Number h = Number(x);
+        double f_eval = myFunc(h).value();
+        double grad_eval = 0; 
         if (hasGrad) {
-            h = myFunc(guess) / myGrad(guess);
+            grad_eval = myGrad(h).value();
         }
-        else { // use adjoints to calculate grad
-            Number input = guess;
-            Number y(myFunc(input));
+        else {
+            Number y(myFunc(h));
             y.propagateToStart();
-            
-            if (abs(y.value()) < eps) {
-                return x;
-            }
-            h = y / input.adjoint();
-        }
-        while (abs(h.value()) >= eps)
-        {
-            if (hasGrad) {
-                h = myFunc(guess) / myGrad(guess);
-            }
-            else { // use adjoints to calculate grad
-                Number input = guess;
-                Number y(myFunc(guess));
-                y.propagateToStart();
-                if (abs(y.value()) < eps or input.adjoint() == 0) {
-                    break;
-                }
-                h = y.value() / input.adjoint();
-            }
-            guess = guess - h;
-            cout << "Error: " << h.value() << endl;
+            grad_eval = h.adjoint();
         }
 
-        return guess.value();
+        while (abs(f_eval / grad_eval) >= eps)
+        {
+            h -= f_eval / grad_eval;
+            cout << "Guess: " << h.value() << endl;
+            f_eval = myFunc(h).value();
+            if (hasGrad) {
+                grad_eval = myGrad(h).value();
+            }
+            else { // use adjoints to calculate grad
+                Number y(myFunc(h));
+                y.propagateToStart();
+                grad_eval = h.adjoint();
+            }
+        }
+
+        return h.value();
     }
 
 };
